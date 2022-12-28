@@ -1,4 +1,4 @@
-package lec1
+package lec01
 
 import com.lannstark.lec01.Person
 
