@@ -14,16 +14,42 @@ import java.lang.IllegalArgumentException
 //    val name: String = name
 //    var age: Int = age
 // 바디는 아무것도 없으면 생략 가능하다.
-class Person (val name: String, var age: Int){// 주 생성자는 반드시 존재해야한다.
+class Person ( name: String, var age: Int){// 주 생성자는 반드시 존재해야한다.
+
+//    val name = name
+//        // field 키워드를 넣어야한다.
+//        // 주생성자에서 받은 name을 불변 프로퍼티 name에 바로 대입
+//        // get() = name.이 되면 name이 name을 호출하기 때문에 무한 루프가 된다.
+//        // 그래서 필드값 커스텀 게터를 쓰려면 field를 쓰는게 맞다.
+//        get() = field.uppercase()
+
+    fun getUpperCaseName(): String{
+        return this.name.uppercase()
+    }
+
+    val uppercaseName: String
+        get() = this.name.uppercase()
+
+    // setter 자체를 안 쓴다.
+    // 지양하자.
+
+    // custom setter
+    var name = name
+        set(value){
+            field = value.uppercase()
+        }
+
+
     // 생성자 제약조건 추가
     init { // 클래스가 초기화되는 시점에 한 번 호출되는 블록
         // validation 로직을 넣는다.
         if (age<=0){
-            throw IllegalArgumentException("나이는 ${-1}일 수 없습니다.")
+            throw IllegalArgumentException("나이는 ${age}일 수 없습니다.")
         }
+        println("초기화 블록")
     }
 
-    // 생성자 오버로딩, 부 생성자
+    // 부 생성자
     // 위에 있는 생성자는 그대로 두고
     // 새로운 생성자를 만들고 this로 최종적으로 주 생성자를 호출한다.
 
@@ -32,8 +58,27 @@ class Person (val name: String, var age: Int){// 주 생성자는 반드시 존�
     }
 
     constructor():this("홍길동"){
-        println("두 번째 부 생성자 ")
+        println("두 번째 부생성자 ")
     }
+
+//    fun isAdult(): Boolean{
+//        return this.age >=20
+//    }
+
+
+    // custom getter -> 자기 자신 변형도 가능하다.
+    // -> 이 클래스에 프로퍼티가 있는 것 처럼 보여지기
+    val isAdult: Boolean
+        // 하나의 expression으로 표현되는 것을 = 으로 만든 것
+        get() = this.age >= 20
+
+        // 아래랑 같은 문법
+//        get(){
+//            return this.age>=20
+//        }
+
+
+
 }
 
 
@@ -46,6 +91,9 @@ fun main(){
     // setAge 또한 그냥 age로 대체된다.
     // 파이썬 문법화가 된 느낌
     // 하지만 실제로 둘 다 getter, setter를 쓰는 거다.
-    person.age = 10
+    person.age = 30
     println(person.age)
+
+    Person()
+    println(person.isAdult)
 }
